@@ -44,7 +44,7 @@ func GetCmdQueryCollectionSupply(queryRoute string, cdc *codec.LegacyAmino) *cob
 
 Example:
 $ %s query %s supply crypto-kitties
-`, version.ClientName, types.ModuleName,
+`, version.AppName, types.ModuleName,
 			),
 		),
 		Args: cobra.ExactArgs(1),
@@ -85,7 +85,7 @@ func GetCmdQueryOwner(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command 
 Example:
 $ %s query %s owner cosmos1gghjut3ccd8ay0zduzj64hwre2fxs9ld75ru9p
 $ %s query %s owner cosmos1gghjut3ccd8ay0zduzj64hwre2fxs9ld75ru9p crypto-kitties
-`, version.ClientName, types.ModuleName, version.ClientName, types.ModuleName,
+`, version.AppName, types.ModuleName, version.AppName, types.ModuleName,
 			),
 		),
 		Args: cobra.RangeArgs(1, 2),
@@ -139,7 +139,7 @@ func GetCmdQueryCollection(queryRoute string, cdc *codec.LegacyAmino) *cobra.Com
 
 Example:
 $ %s query %s collection crypto-kitties
-`, version.ClientName, types.ModuleName,
+`, version.AppName, types.ModuleName,
 			),
 		),
 		Args: cobra.ExactArgs(1),
@@ -180,7 +180,7 @@ func GetCmdQueryDenoms(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command
 
 			Example:
 			$ %s query %s denoms
-			`, version.ClientName, types.ModuleName,
+			`, version.AppName, types.ModuleName,
 			),
 		),
 		Args: cobra.ExactArgs(0),
@@ -213,7 +213,7 @@ func GetCmdQueryNFT(queryRoute string, cdc *codec.LegacyAmino) *cobra.Command {
 
 Example:
 $ %s query %s token crypto-kitties d04b98f48e8f8bcc15c6ae5ac050801cd6dcfd428fb5f9e65c4e16e7807340fa
-`, version.ClientName, types.ModuleName,
+`, version.AppName, types.ModuleName,
 			),
 		),
 		Args: cobra.ExactArgs(2),
