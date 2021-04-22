@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/tendermint/tendermint/crypto/ed25519"
-	kv "github.com/tendermint/tendermint/libs/kv"
+	abci "github.com/tendermint/tendermint/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -19,7 +19,7 @@ var (
 	addr   = sdk.AccAddress(delPk1.Address())
 )
 
-func makeTestCodec() (cdc *codec.Codec) {
+func makeTestCodec() (cdc *codec.LegacyAmino) {
 	cdc = codec.New()
 	sdk.RegisterCodec(cdc)
 	types.RegisterCodec(cdc)
@@ -32,10 +32,10 @@ func TestDecodeStore(t *testing.T) {
 	collection := types.NewCollection("kitties", types.NFTs{&nft})
 	idCollection := types.NewIDCollection("kitties", []string{"1", "2", "3"})
 
-	kvPairs := kv.Pairs{
-		kv.Pair{Key: types.GetCollectionKey("kitties"), Value: cdc.MustMarshalBinaryLengthPrefixed(collection)},
-		kv.Pair{Key: types.GetOwnerKey(addr, "kitties"), Value: cdc.MustMarshalBinaryLengthPrefixed(idCollection)},
-		kv.Pair{Key: []byte{0x99}, Value: []byte{0x99}},
+	kvPairs := abci.EventAttribute{
+		abci.EventAttribute{Key: types.GetCollectionKey("kitties"), Value: cdc.MustMarshalBinaryLengthPrefixed(collection)},
+		abci.EventAttribute{Key: types.GetOwnerKey(addr, "kitties"), Value: cdc.MustMarshalBinaryLengthPrefixed(idCollection)},
+		abci.EventAttribute{Key: []byte{0x99}, Value: []byte{0x99}},
 	}
 
 	tests := []struct {

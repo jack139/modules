@@ -10,7 +10,7 @@ SIMAPP = ./app
 test: test-unit
 
 test-unit:
-	@go test -mod=readonly $(PACKAGES_NOSIMULATION) -tags='ledger test_ledger_mock'
+	@go test $(PACKAGES_NOSIMULATION) -tags='ledger test_ledger_mock'
 
 .PHONY: test test-unit
 

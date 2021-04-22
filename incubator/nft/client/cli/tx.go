@@ -9,13 +9,12 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
+	utils "github.com/cosmos/cosmos-sdk/x/auth/client"
 	"github.com/cosmos/modules/incubator/nft/types"
 )
 
@@ -25,7 +24,7 @@ const (
 )
 
 // GetTxCmd returns the transaction commands for this module
-func GetTxCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
+func GetTxCmd(storeKey string, cdc *codec.LegacyAmino) *cobra.Command {
 	nftTxCmd := &cobra.Command{
 		Use:   types.ModuleName,
 		Short: "NFT transactions subcommands",
@@ -43,7 +42,7 @@ func GetTxCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
 }
 
 // GetCmdTransferNFT is the CLI command for sending a TransferNFT transaction
-func GetCmdTransferNFT(cdc *codec.Codec) *cobra.Command {
+func GetCmdTransferNFT(cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:   "transfer [sender] [recipient] [denom] [tokenID]",
 		Short: "transfer a NFT to a recipient",
@@ -64,7 +63,7 @@ crypto-kitties d04b98f48e8f8bcc15c6ae5ac050801cd6dcfd428fb5f9e65c4e16e7807340fa 
 		RunE: func(cmd *cobra.Command, args []string) error {
 			inBuf := bufio.NewReader(cmd.InOrStdin())
 			txBldr := authtypes.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
+			cliCtx := client.GetClientContextFromCmd(cmd)
 
 			sender, err := sdk.AccAddressFromBech32(args[0])
 			if err != nil {
@@ -86,7 +85,7 @@ crypto-kitties d04b98f48e8f8bcc15c6ae5ac050801cd6dcfd428fb5f9e65c4e16e7807340fa 
 }
 
 // GetCmdEditNFTMetadata is the CLI command for sending an EditMetadata transaction
-func GetCmdEditNFTMetadata(cdc *codec.Codec) *cobra.Command {
+func GetCmdEditNFTMetadata(cdc *codec.LegacyAmino) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "edit-metadata [denom] [tokenID]",
 		Short: "edit the metadata of an NFT",
@@ -104,7 +103,7 @@ $ %s tx %s edit-metadata crypto-kitties d04b98f48e8f8bcc15c6ae5ac050801cd6dcfd42
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			inBuf := bufio.NewReader(cmd.InOrStdin())
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
+			cliCtx := client.GetClientContextFromCmd(cmd)
 			txBldr := authtypes.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			denom := args[0]
@@ -121,7 +120,7 @@ $ %s tx %s edit-metadata crypto-kitties d04b98f48e8f8bcc15c6ae5ac050801cd6dcfd42
 }
 
 // GetCmdMintNFT is the CLI command for a MintNFT transaction
-func GetCmdMintNFT(cdc *codec.Codec) *cobra.Command {
+func GetCmdMintNFT(cdc *codec.LegacyAmino) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "mint [denom] [tokenID] [recipient]",
 		Short: "mint an NFT and set the owner to the recipient",
@@ -139,7 +138,7 @@ cosmos1gghjut3ccd8ay0zduzj64hwre2fxs9ld75ru9p --from mykey
 		Args: cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			inBuf := bufio.NewReader(cmd.InOrStdin())
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
+			cliCtx := client.GetClientContextFromCmd(cmd)
 			txBldr := authtypes.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			denom := args[0]
@@ -163,7 +162,7 @@ cosmos1gghjut3ccd8ay0zduzj64hwre2fxs9ld75ru9p --from mykey
 }
 
 // GetCmdBurnNFT is the CLI command for sending a BurnNFT transaction
-func GetCmdBurnNFT(cdc *codec.Codec) *cobra.Command {
+func GetCmdBurnNFT(cdc *codec.LegacyAmino) *cobra.Command {
 	return &cobra.Command{
 		Use:   "burn [denom] [tokenID]",
 		Short: "burn an NFT",
@@ -181,7 +180,7 @@ $ %s tx %s burn crypto-kitties d04b98f48e8f8bcc15c6ae5ac050801cd6dcfd428fb5f9e65
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			inBuf := bufio.NewReader(cmd.InOrStdin())
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
+			cliCtx := client.GetClientContextFromCmd(cmd)
 			txBldr := authtypes.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			denom := args[0]

@@ -4,11 +4,12 @@ package types
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"github.com/cosmos/modules/incubator/nft/exported"
 )
 
 // RegisterCodec concrete types on codec
-func RegisterCodec(cdc *codec.Codec) {
+func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterInterface((*exported.NFT)(nil), nil)
 	cdc.RegisterConcrete(&BaseNFT{}, "cosmos-sdk/BaseNFT", nil)
 	cdc.RegisterConcrete(&IDCollection{}, "cosmos-sdk/IDCollection", nil)
@@ -21,11 +22,10 @@ func RegisterCodec(cdc *codec.Codec) {
 }
 
 // ModuleCdc generic sealed codec to be used throughout this module
-var ModuleCdc *codec.Codec
+var ModuleCdc = codec.NewLegacyAmino()
 
 func init() {
-	ModuleCdc = codec.New()
-	codec.RegisterCrypto(ModuleCdc)
+	cryptocodec.RegisterCrypto(ModuleCdc)
 	RegisterCodec(ModuleCdc)
 	ModuleCdc.Seal()
 }

@@ -21,7 +21,7 @@ const (
 	OpWeightedMsgBurnNFT         = "op_weighted_msg_burn_nft"
 )
 
-func WeightedOperations(appParams simulation.AppParams, cdc *codec.Codec, ak types.AccountKeeper, k keeper.Keeper) simulation.WeightedOperations {
+func WeightedOperations(appParams simulation.AppParams, cdc *codec.LegacyAmino, ak types.AccountKeeper, k keeper.Keeper) simulation.WeightedOperations {
 
 	var (
 		weightedMsgTransferNFT     int

@@ -4,14 +4,14 @@ import (
 	"bytes"
 	"fmt"
 
-	kv "github.com/tendermint/tendermint/libs/kv"
+	abci "github.com/tendermint/tendermint/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/modules/incubator/nft/types"
 )
 
 // DecodeStore unmarshals the KVPair's Value to the corresponding gov type
-func DecodeStore(cdc *codec.Codec, kvA, kvB kv.Pair) string {
+func DecodeStore(cdc *codec.LegacyAmino, kvA, kvB abci.EventAttribute) string {
 	switch {
 	case bytes.Equal(kvA.Key[:1], types.CollectionsKeyPrefix):
 		var collectionA, collectionB types.Collection
